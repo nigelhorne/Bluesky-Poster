@@ -1,0 +1,9 @@
+use Bluesky::Poster;
+
+my $poster = Bluesky::Poster->new(
+    handle       => 'your-handle.bsky.social',
+    app_password => 'abcd-efgh-ijkl-mnop', # Get this from https://bsky.app/settings/app-passwords
+);
+
+my $result = $poster->post("Hello from Perl and Bluesky!");
+print "Post URI: $result->{uri}\n";
