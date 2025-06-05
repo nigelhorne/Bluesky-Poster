@@ -7,6 +7,43 @@ use JSON qw(encode_json decode_json);
 use URI;
 use Carp;
 
+=head1 NAME
+
+Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
+
+=head1 SYNOPSIS
+
+  use Bluesky::Poster;
+
+  my $poster = Bluesky::Poster->new(
+      handle       => 'your-handle.bsky.social',
+      app_password => 'abcd-efgh-ijkl-mnop',
+  );
+
+  my $result = $poster->post("Hello from Perl!");
+  print "Post URI: $result->{uri}\n";
+
+=head1 DESCRIPTION
+
+I've all but given up with X/Twitter.
+It's API is overly complex and no longer freely available,
+so I'm trying Bluesky.
+
+This module authenticates with Bluesky using app passwords and posts text
+messages using the AT Protocol API.
+
+=head1 METHODS
+
+=head2 new(handle => ..., app_password => ...)
+
+Constructs a new poster object and logs in.
+
+=head2 post($text)
+
+Posts the given text to your Bluesky feed.
+
+=cut
+
 our $VERSION = '0.01';
 
 sub new {
@@ -93,41 +130,6 @@ sub _iso8601 {
 
 1;
 
-__END__
-
-=pod
-
-=head1 NAME
-
-Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
-
-=head1 SYNOPSIS
-
-  use Bluesky::Poster;
-
-  my $poster = Bluesky::Poster->new(
-      handle       => 'your-handle.bsky.social',
-      app_password => 'abcd-efgh-ijkl-mnop',
-  );
-
-  my $result = $poster->post("Hello from Perl!");
-  print "Post URI: $result->{uri}\n";
-
-=head1 DESCRIPTION
-
-This module authenticates with Bluesky using app passwords and posts text
-messages using the AT Protocol API.
-
-=head1 METHODS
-
-=head2 new(handle => ..., app_password => ...)
-
-Constructs a new poster object and logs in.
-
-=head2 post($text)
-
-Posts the given text to your Bluesky feed.
-
 =head1 AUTHOR
 
 Nigel Horne, with help from ChatGPT
@@ -139,3 +141,4 @@ the same terms as Perl itself.
 
 =cut
 
+__END__

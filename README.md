@@ -16,6 +16,10 @@ Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
 
 # DESCRIPTION
 
+I've all but given up with X/Twitter.
+It's API is overly complex and no longer freely available,
+so I'm trying Bluesky.
+
 This module authenticates with Bluesky using app passwords and posts text
 messages using the AT Protocol API.
 
@@ -31,7 +35,7 @@ Posts the given text to your Bluesky feed.
 
 # AUTHOR
 
-Nigel Horne, with help from OpenAI
+Nigel Horne, with help from ChatGPT
 
 # LICENSE
 
