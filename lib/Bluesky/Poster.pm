@@ -61,7 +61,7 @@ sub post {
         repo   => $self->{session}{did},
         collection => 'app.bsky.feed.post',
         record => {
-            \$type => 'app.bsky.feed.post',
+            '$type' => 'app.bsky.feed.post',
             text  => $text,
             createdAt => $iso_timestamp,
         },
@@ -130,7 +130,7 @@ Posts the given text to your Bluesky feed.
 
 =head1 AUTHOR
 
-OpenAI, based on user request
+Nigel Horne, with help from ChatGPT
 
 =head1 LICENSE
 
