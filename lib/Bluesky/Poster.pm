@@ -16,7 +16,7 @@ Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
   use Bluesky::Poster;
 
   my $poster = Bluesky::Poster->new(
-      handle       => 'your-handle.bsky.social',
+      identifier       => 'your-identifier.bsky.social',
       app_password => 'abcd-efgh-ijkl-mnop',
   );
 
@@ -34,7 +34,7 @@ messages using the AT Protocol API.
 
 =head1 METHODS
 
-=head2 new(handle => ..., app_password => ...)
+=head2 new(identifier => ..., app_password => ...)
 
 Constructs a new poster object and logs in.
 
@@ -49,12 +49,12 @@ our $VERSION = '0.01';
 sub new {
     my ($class, %args) = @_;
 
-    for my $required (qw(handle app_password)) {
+    for my $required (qw(identifier app_password)) {
         croak "Missing required parameter: $required" unless $args{$required};
     }
 
     my $self = {
-        handle       => $args{handle},
+        identifier       => $args{identifier},
         app_password => $args{app_password},
         agent        => LWP::UserAgent->new,
         json         => JSON->new->utf8->canonical,
@@ -75,13 +75,13 @@ sub _login {
         'https://bsky.social/xrpc/com.atproto.server.createSession',
         'Content-Type' => 'application/json',
         Content => $self->{json}->encode({
-            identifier => $self->{handle},
+            identifier => $self->{identifier},
             password   => $self->{app_password},
         }),
     );
 
     unless ($res->is_success) {
-        croak "Login failed: " . $res->status_line . "\n" . $res->decoded_content;
+        croak 'Login failed: ' . $res->status_line . "\n" . $res->decoded_content;
     }
 
     $self->{session} = $self->{json}->decode($res->decoded_content);
