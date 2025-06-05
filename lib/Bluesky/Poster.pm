@@ -3,7 +3,7 @@ package Bluesky::Poster;
 use strict;
 use warnings;
 use LWP::UserAgent;
-use JSON qw(encode_json decode_json);
+use JSON::MaybeXS qw(encode_json decode_json);
 use URI;
 use Carp;
 
@@ -16,8 +16,8 @@ Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
   use Bluesky::Poster;
 
   my $poster = Bluesky::Poster->new(
-      identifier       => 'your-identifier.bsky.social',
-      app_password => 'abcd-efgh-ijkl-mnop',
+	  identifier	   => 'your-identifier.bsky.social',
+	  password => 'abcd-efgh-ijkl-mnop',
   );
 
   my $result = $poster->post("Hello from Perl!");
@@ -34,7 +34,7 @@ messages using the AT Protocol API.
 
 =head1 METHODS
 
-=head2 new(identifier => ..., app_password => ...)
+=head2 new(identifier => ..., password => ...)
 
 Constructs a new poster object and logs in.
 
@@ -47,85 +47,87 @@ Posts the given text to your Bluesky feed.
 our $VERSION = '0.01';
 
 sub new {
-    my ($class, %args) = @_;
+	my ($class, %args) = @_;
 
-    for my $required (qw(identifier app_password)) {
-        croak "Missing required parameter: $required" unless $args{$required};
-    }
+	for my $required (qw(identifier password)) {
+		croak "Missing required parameter: $required" unless $args{$required};
+	}
 
-    my $self = {
-        identifier       => $args{identifier},
-        app_password => $args{app_password},
-        agent        => LWP::UserAgent->new,
-        json         => JSON->new->utf8->canonical,
-        session      => undef,
-    };
+	my $self = {
+		identifier	   => $args{identifier},
+		password => $args{password},
+		agent		=> LWP::UserAgent->new,
+		json => JSON::MaybeXS->new()->utf8->canonical,
+		session	  => undef,
+	};
 
-    bless $self, $class;
-    $self->_login;
+	bless $self, $class;
 
-    return $self;
+	$self->_login();
+
+	return $self;
 }
 
 sub _login {
-    my ($self) = @_;
-    my $ua = $self->{agent};
+	my $self = shift;
 
-    my $res = $ua->post(
-        'https://bsky.social/xrpc/com.atproto.server.createSession',
-        'Content-Type' => 'application/json',
-        Content => $self->{json}->encode({
-            identifier => $self->{identifier},
-            password   => $self->{app_password},
-        }),
-    );
+	my $ua = $self->{agent};
 
-    unless ($res->is_success) {
-        croak 'Login failed: ' . $res->status_line . "\n" . $res->decoded_content;
-    }
+	my $res = $ua->post(
+		'https://bsky.social/xrpc/com.atproto.server.createSession',
+		'Content-Type' => 'application/json',
+		Content => $self->{json}->encode({
+			identifier => $self->{identifier},
+			password   => $self->{password},
+		}),
+	);
 
-    $self->{session} = $self->{json}->decode($res->decoded_content);
+	unless ($res->is_success) {
+		croak 'Login failed: ', $res->status_line, "\n", $res->decoded_content;
+	}
+
+	$self->{session} = $self->{json}->decode($res->decoded_content);
 }
 
 sub post {
-    my ($self, $text) = @_;
-    croak "Text is required" unless defined $text;
+	my ($self, $text) = @_;
 
-    my $now = time();
-    my $iso_timestamp = _iso8601($now);
+	croak 'Text is required' unless defined $text;
 
-    my $payload = {
-        repo   => $self->{session}{did},
-        collection => 'app.bsky.feed.post',
-        record => {
-            '$type' => 'app.bsky.feed.post',
-            text  => $text,
-            createdAt => $iso_timestamp,
-        },
-    };
+	my $iso_timestamp = _iso8601(time());
 
-    my $res = $self->{agent}->post(
-        'https://bsky.social/xrpc/com.atproto.repo.createRecord',
-        'Content-Type'  => 'application/json',
-        'Authorization' => 'Bearer ' . $self->{session}{accessJwt},
-        Content => $self->{json}->encode($payload),
-    );
+	my $payload = {
+		repo   => $self->{session}{did},
+		collection => 'app.bsky.feed.post',
+		record => {
+			'$type' => 'app.bsky.feed.post',
+			text  => $text,
+			createdAt => $iso_timestamp,
+		},
+	};
 
-    unless ($res->is_success) {
-        croak "Post failed: " . $res->status_line . "\n" . $res->decoded_content;
-    }
+	my $res = $self->{agent}->post(
+		'https://bsky.social/xrpc/com.atproto.repo.createRecord',
+		'Content-Type'  => 'application/json',
+		'Authorization' => 'Bearer ' . $self->{session}{accessJwt},
+		Content => $self->{json}->encode($payload),
+	);
 
-    return $self->{json}->decode($res->decoded_content);
+	unless ($res->is_success) {
+		croak 'Post failed: ', $res->status_line, "\n", $res->decoded_content;
+	}
+
+	return $self->{json}->decode($res->decoded_content);
 }
 
 sub _iso8601 {
-    my $t = shift;
-    my @gmt = gmtime($t);
-    return sprintf(
-        "%04d-%02d-%02dT%02d:%02d:%02dZ",
-        $gmt[5]+1900, $gmt[4]+1, $gmt[3],
-        $gmt[2], $gmt[1], $gmt[0],
-    );
+	my $t = shift;
+	my @gmt = gmtime($t);
+	return sprintf(
+		"%04d-%02d-%02dT%02d:%02d:%02dZ",
+		$gmt[5]+1900, $gmt[4]+1, $gmt[3],
+		$gmt[2], $gmt[1], $gmt[0],
+	);
 }
 
 1;

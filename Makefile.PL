@@ -19,7 +19,7 @@ WriteMakefile(
 	LICENSE => 'GPL',
 	PREREQ_PM => {
 		'LWP::UserAgent' => 0,
-		'JSON'	 => 0,
+		'JSON::MaybeXS' => 0,
 		'URI'		 => 0,
 		'Carp' => 0,
 	}, TEST_REQUIRES => {

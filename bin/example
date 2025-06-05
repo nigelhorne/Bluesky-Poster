@@ -20,7 +20,7 @@ my $config = Config::Abstraction->new('bluesky');
 
 my $poster = Bluesky::Poster->new(
 	identifier => $config->identifier(),
-	app_password => $config->password(), # Get this from https://bsky.app/settings/app-passwords
+	password => $config->password(), # Get this from https://bsky.app/settings/app-passwords
 );
 
 my $result = $poster->post('Hello from Perl and Bluesky!');

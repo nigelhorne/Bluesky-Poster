@@ -2,7 +2,8 @@ Revision history for Bluesky::Poster
 
 0.02
 	Started to add CI
-	Changed handle to identifier
+	Changed handle to identifier, and app_password to password
+	Use JSON::MaybeXS instead of JSON
 
 0.01	Thu Jun  5 16:56:04 EDT 2025
 	First draft
