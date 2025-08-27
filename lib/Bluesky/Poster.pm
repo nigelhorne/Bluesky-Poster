@@ -59,7 +59,9 @@ sub new {
 			# letters, numbers and full stops
 			'identifier' => { type => 'string', 'min' => 2, matches => qr/^[a-zA-Z0-9.]+$/i },
 			# 16 character hex 4-4-4-4
-			'password' => { type => 'string', 'min' => 19, 'max' => 19, matches => qr/^[a-f0-9]{4}(?:-[a-f0-9]{4}){3}$/ },
+			'password' => { type => 'string', 'min' => 19, 'max' => 19, matches => qr/^[a-z0-9]{4}(?:\-[a-z0-9]{4}){3}$/ },
+			'logger' => {},
+			'config_path' => {}
 		}
 	});
 
@@ -118,7 +120,7 @@ Posts the given text to your Bluesky feed.
 
 sub post {
 	my $self = shift;
-	my $params = Params::Get('text', @_);
+	my $params = Params::Get::get_params('text', @_);
 	my $text = $params->{'text'};
 
 	if(!defined($text)) {

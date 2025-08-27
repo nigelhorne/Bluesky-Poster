@@ -17,6 +17,7 @@ WriteMakefile(
 	ABSTRACT_FROM => 'lib/Bluesky/Poster.pm',
 	VERSION_FROM => 'lib/Bluesky/Poster.pm',
 	LICENSE => 'GPL',
+	EXE_FILES => [ 'bin/bluesky' ],
 	PREREQ_PM => {
 		'Carp' => 0,
 		'LWP::UserAgent' => 0,
