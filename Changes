@@ -1,7 +1,7 @@
 Revision history for Bluesky::Poster
 
-0.02
-	Started to add CI
+0.02	Wed Aug 27 15:13:56 EDT 2025
+	Added basic CI
 	Changed handle to identifier, and app_password to password
 	Use JSON::MaybeXS instead of JSON
 	Allow identifier and password to be read from config file

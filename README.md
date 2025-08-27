@@ -37,7 +37,11 @@ Posts the given text to your Bluesky feed.
 
 # AUTHOR
 
-Nigel Horne, with help from ChatGPT
+Nigel Horne, with some help from ChatGPT
+
+# SUPPORT
+
+This module is provided as-is without any warranty.
 
 # LICENSE
 

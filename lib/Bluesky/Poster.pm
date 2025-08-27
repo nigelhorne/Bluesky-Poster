@@ -46,7 +46,7 @@ as per L<Object::Configure>.
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub new {
 	my $proto = shift;
@@ -174,7 +174,11 @@ sub _iso8601 {
 
 =head1 AUTHOR
 
-Nigel Horne, with help from ChatGPT
+Nigel Horne, with some help from ChatGPT
+
+=head1 SUPPORT
+
+This module is provided as-is without any warranty.
 
 =head1 LICENSE
 
