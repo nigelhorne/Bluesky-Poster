@@ -7,8 +7,8 @@ Bluesky::Poster - Simple interface for posting to Bluesky (AT Protocol)
     use Bluesky::Poster;
 
     my $poster = Bluesky::Poster->new(
-        handle       => 'your-handle.bsky.social',
-        app_password => 'abcd-efgh-ijkl-mnop',
+            identifier     => 'your-identifier.bsky.social',
+            password => 'abcd-efgh-ijkl-mnop',
     );
 
     my $result = $poster->post("Hello from Perl!");
@@ -25,9 +25,11 @@ messages using the AT Protocol API.
 
 # METHODS
 
-## new(handle => ..., app\_password => ...)
+## new(identifier => ..., password => ...)
 
 Constructs a new poster object and logs in.
+The indentifier and password can also be read in from a configuration file,
+as per [Object::Configuration](https://metacpan.org/pod/Object%3A%3AConfiguration).
 
 ## post($text)
 
