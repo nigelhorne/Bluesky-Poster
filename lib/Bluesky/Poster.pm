@@ -42,7 +42,7 @@ messages using the AT Protocol API.
 
 Constructs a new poster object and logs in.
 The indentifier and password can also be read in from a configuration file,
-as per L<Object::Configuration>.
+as per L<Object::Configure>.
 
 =cut
 
