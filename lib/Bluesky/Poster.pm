@@ -76,9 +76,9 @@ sub new {
 
 	my $self = {
 		%{$params},
-		agent	=> LWP::UserAgent->new,
+		agent => LWP::UserAgent->new,
 		json => JSON::MaybeXS->new()->utf8->canonical,
-		session	=> undef,
+		session => undef,
 	};
 
 	bless $self, $class;
@@ -104,7 +104,7 @@ sub _login {
 
 	unless ($res->is_success) {
 		if(my $logger = $self->{'logger'}) {
-			$logger->error('Login failed: ', $res->status_line, "\n", $res->decoded_content());
+			$logger->error('Login failed: ' . $res->status_line . "\n" . $res->decoded_content());
 		}
 		croak('Login failed: ', $res->status_line, "\n", $res->decoded_content());
 	}
