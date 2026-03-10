@@ -1,5 +1,6 @@
 bin/bluesky
 Changes
+cpanfile
 lib/Bluesky/Poster.pm
 LICENSE
 Makefile.PL
